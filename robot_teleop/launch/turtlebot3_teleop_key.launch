@@ -1,0 +1,8 @@
+<launch>
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+  <param name="model" value="$(arg model)"/>
+
+  <!-- turtlebot3_teleop_key already has its own built in velocity smoother -->
+  <node pkg="robot_teleop" type="robot_teleop_std.py" name="robot_teleop"  output="screen">
+  </node>
+</launch>
