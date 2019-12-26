@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # TurtleBot3
 <img src="https://github.com/ROBOTIS-GIT/emanual/blob/master/assets/images/platform/turtlebot3/logo_turtlebot3.png" width="300">
 
@@ -52,3 +53,7 @@
 - [Website for TurtleBot Series](http://www.turtlebot.com/)
 - [e-Book for TurtleBot3](https://community.robotsource.org/t/download-the-ros-robot-programming-book-for-free/51/)
 - [Videos for TurtleBot3 ](https://www.youtube.com/playlist?list=PLRG6WP3c31_XI3wlvHlx2Mp8BYqgqDURU)
+=======
+# icra_ros_love_cannot_speak
+This repo is for modifying and developing turtlebot3 code to prepare for the 2020 ICRA Robomaster Competition
+>>>>>>> 087e00fba006a9afab45ca26e25d367262e80eb6
