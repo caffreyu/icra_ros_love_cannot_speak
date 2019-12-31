@@ -119,16 +119,13 @@ AngularPub = rospy.Publisher("/command/angular", self.twist, queue_size=5)"""
 
 if __name__ == '__main__':
 
-    rospy.init_node('turtlebot3_teleop')
+    rospy.init_node('robot_teleop')
 
-    turtlebot3_model = rospy.get_param("model", "burger")
     pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
     #  Set subscribers
     rospy.Subscriber("/odom", Odometry, autoMove.getState)
     rospy.Subscriber("/command/pos", Vector3, autoMove.moveCommand)
     
-
-
     # Server(AlignmentControllerConfig, dynamicReconfigureCb)
     rospy.spin()
