@@ -4,7 +4,7 @@ import rospy
 import tf
 from std_msgs.msg import Float64, Int32, Int8
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Twist, Vector3, Point, Pose
+from geometry_msgs.msg import Twist, Vector3
 from PID import PID
 from math import sin, cos, pi, atan2, sqrt
 
@@ -43,9 +43,11 @@ class AUTO_MOVE():
 
     def getState(self, msg):
         odom = msg
-        self.position_x = odom.pose.pose.position.x
-        self.position_y = odom.pose.pose.position.y
-        self.position_z = odom.pose.pose.position.z
+
+        position = odom.pose.pose.position
+        self.position_x = position.x
+        self.position_y = position.y
+        self.position_z = position.z
 
         quaternion = odom.pose.pose.orientation
         q = [quaternion.x,
@@ -54,6 +56,7 @@ class AUTO_MOVE():
              quaternion.w]
         (self.roll, self.pitch, self.yaw) = tf.transformations.euler_from_quaternion(q)
 
+        
     def moveCommand(self, msg):
         self.cmd_pos_x = msg.x
         self.cmd_pos_y = msg.y
@@ -66,12 +69,11 @@ class AUTO_MOVE():
 
         if (self.cmd_pos_x == -0.1 and self.cmd_pos_y == -0.1):
             # 目标位置
-            target_x=-1
-            target_y=-1
+            target_x=-0.1
+            target_y=-0.0
             # linear error
             x_error=target_x-current_x
             y_error=target_y-current_y
-            print(x_error, y_error)
             distance_error=sqrt(x_error**2+y_error**2)
             # # 改变角度
             # change_angle=-current_yaw
@@ -85,28 +87,26 @@ class AUTO_MOVE():
             elif yaw_error <= -pi:
                 yaw_error += 2*pi
             # pid控制z轴旋转角速度
-            if abs(yaw_error) > 0.01:
-                self.twist.linear.x=0
-                self.twist.linear.y=0
-                self.twist.linear.z=0
-                self.twist.angular.x=0
-                self.twist.angular.y=0
-                self.twist.angular.z = self.pid_controller.calculate_pid(yaw_error)
-                print('yaw_error: {:g}, current_yaw: {:g}'.format(yaw_error, current_yaw))
-            else:
+            # if abs(yaw_error) > 0.005:
+            #     self.twist.angular.z = self.pid_controller.calculate_pid(yaw_error)
+            #     pub.publish(self.twist)
+            #     print('yaw_error: {:g}, current_yaw: {:g}'.format(yaw_error, current_yaw))
+            # # else:
+            # #     self.shutdown()
+            # #     rospy.loginfo('reached')
+            # else:
                 # pid控制线速度
-                if abs(distance_error) > 0.01 :
-                    self.twist.linear.x= -self.linear_vel
-                    self.twist.linear.y = 0
-                    self.twist.linear.z = 0
-                    self.twist.angular.x = 0
-                    self.twist.angular.y = 0
-                    self.twist.angular.z = 0
-                    print('distance_error: {:g}'.format(distance_error))
-                else:
-                    self.shutdown()
-                    rospy.loginfo('reached')
-            pub.publish(self.twist)
+            if abs(x_error) > 0.005 :
+                twist2=Twist()
+                twist2.linear.x=self.pid_controller.calculate_pid(x_error)
+                twist2.linear.y=0
+                twist2.linear.z=0
+                pub.publish(twist2)
+                print('x_error: {:g}, current_x: {:g} '.format(x_error, current_x))
+            else:
+                self.shutdown()
+                rospy.loginfo('reached')
+
         else:
             self.shutdown()
 
@@ -119,16 +119,13 @@ AngularPub = rospy.Publisher("/command/angular", self.twist, queue_size=5)"""
 
 if __name__ == '__main__':
 
-    rospy.init_node('turtlebot3_teleop')
+    rospy.init_node('robot_teleop')
 
-    turtlebot3_model = rospy.get_param("model", "burger")
     pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
     #  Set subscribers
     rospy.Subscriber("/odom", Odometry, autoMove.getState)
     rospy.Subscriber("/command/pos", Vector3, autoMove.moveCommand)
-
-
-
+    
     # Server(AlignmentControllerConfig, dynamicReconfigureCb)
     rospy.spin()

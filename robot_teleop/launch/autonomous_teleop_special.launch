@@ -1,0 +1,5 @@
+<launch>
+  <!-- auto_move_special already has its own built in velocity smoother -->
+  <node pkg="robot_teleop" type="auto_move_special.py" name="robot_teleop"  output="screen">
+  </node>
+</launch>
