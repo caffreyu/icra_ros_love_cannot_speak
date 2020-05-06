@@ -2,6 +2,14 @@
 Changelog for package turtlebot3_slam
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.3 (2020-03-03)
+------------------
+* Added turtlebot3_manipulation_slam.launch for TurtleBot3 SLAM with OpenMANIPULATOR
+
+1.2.2 (2019-08-20)
+------------------
+* none
+
 1.2.1 (2019-08-20)
 ------------------
 * Fixed ROS_ASSERT bug `#416 <https://github.com/ROBOTIS-GIT/turtlebot3/issues/416>`_
