@@ -37,12 +37,6 @@ catkin_package(
 ################################################################################
 
 ################################################################################
-# Install
-################################################################################
-catkin_install_python(PROGRAMS
-  nodes/robot_teleop_key
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
 
 install(DIRECTORY launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
